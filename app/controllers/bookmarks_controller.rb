@@ -4,9 +4,11 @@ class BookmarksController < ApplicationController
 
   def index
     @bookmarks = current_user.bookmarks.includes(:book)
+    render json: @bookmarks
   end
 
   def show
+    render json: @bookmark
   end
 
   def edit
@@ -14,18 +16,16 @@ class BookmarksController < ApplicationController
   end
 
   def update
-    @bookmark.update(bookmark_params)
-
-    if @bookmark.save
-      redirect_to bookmarks_path
+    if @bookmark.update(bookmark_params)
+      render json: @bookmark, status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @bookmark.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
     @bookmark.destroy
-    redirect_to bookmarks_path, status: :see_other
+    render json: { message: "Bookmark successfully deleted" }, status: :ok
   end
 
   private
@@ -33,7 +33,8 @@ class BookmarksController < ApplicationController
   def set_bookmark
     @bookmark = current_user.bookmarks.find(params[:id])
   end
-def bookmark_params
+
+  def bookmark_params
     params.require(:bookmark).permit(:book_id)
   end
 

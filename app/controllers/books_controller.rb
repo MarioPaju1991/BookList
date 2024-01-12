@@ -1,15 +1,18 @@
 class BooksController < ApplicationController
-skip_before_action :authenticate_user!, only: [:index, :show]
-before_action :set_book, only: [:show, :edit, :update]
+  skip_before_action :authenticate_user!, only: [:index, :show]
+  before_action :set_book, only: [:show, :edit, :update]
 
   def index
     @books = Book.all
+    render json: @books
   end
 
   def show
+    render json: @book
   end
 
   def new
+    # render from form in views/books new.html.erb
     @book = Book.new
   end
 
@@ -17,9 +20,10 @@ before_action :set_book, only: [:show, :edit, :update]
     @book = Book.new(book_params)
 
     if @book.save
-      redirect_to book_path(@book)
+
+      render json: @book, status: :created, location: @book
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -28,19 +32,17 @@ before_action :set_book, only: [:show, :edit, :update]
   end
 
   def update
-    @book.update(book_params)
-
-    if @book.save
-      redirect_to book_path(@book)
+    if @book.update(book_params)
+      render json: @book, status: :ok, location: @book
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def destroy
 
     @book.destroy
-    redirect_to books_path, status: :see_other
+    render json: { message: "Book successfully deleted" }, status: :ok
   end
 
   private
