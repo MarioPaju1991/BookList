@@ -2,10 +2,13 @@ source "https://rubygems.org"
 
 ruby "3.1.2"
 
-#rspec-rails is a testing framework for Rails 5+.
+# gem which creates consistent and valid data for testing purposes
+gem 'factory_bot_rails', '~> 6.2', '>= 6.2.0'
+
+#rspec-rails is a testing framework for Rails 5+
 gem 'rspec-rails', '~> 6.1'
 
-#This gem allows you to easily use [Hashids](http://hashids.org/ruby/) in your Rails app.
+#This gem allows you to easily use [Hashids](http://hashids.org/ruby/) in your Rails app
 gem 'hashid-rails', '~> 1.2', '>= 1.2.2'
 
 #Faker helps you generate realistic test data, and populate your database with more than a couple of records while you're doing development.
@@ -24,7 +27,7 @@ gem "pg", "~> 1.1"
 gem "puma", ">= 5.0"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
- gem "jbuilder"
+ gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
