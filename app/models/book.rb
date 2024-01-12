@@ -1,4 +1,4 @@
 class Book < ApplicationRecord
-  has_many :bookmarks
+  has_many :bookmarks, dependent: :destroy
   has_many :users, through: :bookmarks
 end

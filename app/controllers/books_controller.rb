@@ -24,6 +24,7 @@ before_action :set_book, only: [:show, :edit, :update]
   end
 
   def edit
+    # render from form in views/books edit.html.erb
   end
 
   def update
@@ -37,9 +38,9 @@ before_action :set_book, only: [:show, :edit, :update]
   end
 
   def destroy
-    @book.destroy
 
-    redirect_to books_path(@book), status: :see_other
+    @book.destroy
+    redirect_to books_path, status: :see_other
   end
 
   private
