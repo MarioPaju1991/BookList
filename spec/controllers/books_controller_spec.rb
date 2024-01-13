@@ -1,10 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe BooksController, type: :controller do
+  let(:user) { FactoryBot.create(:user) }
+  before do
+    sign_in user
+  end
+
   describe 'GET #index' do
+    let!(:book) { FactoryBot.create(:book) }
     it 'returns a success response' do
       get :index, format: :json
       expect(response).to have_http_status(:success)
+      expect(response.body).to eq([book].to_json)
     end
   end
 
@@ -17,7 +24,7 @@ RSpec.describe BooksController, type: :controller do
       expect(response).to have_http_status(:success)
 
 
-      expected_attributes = ['id', 'title', 'author', 'publisher', 'genre', 'image_url']
+      expected_attributes = ['id', 'title', 'author', 'publisher', 'genre', 'image_url', 'created_at', 'updated_at', 'hashid']
       parsed_response = JSON.parse(response.body)
 
       expected_attributes.each do |attribute|
@@ -30,6 +37,7 @@ RSpec.describe BooksController, type: :controller do
   end
 
   context 'when the book does not exist' do
+    let(:non_existent_book_id) { '123456789' }
     it 'returns a not found response' do
       get :show, params: { hashid: non_existent_book_id }, format: :json
       expect(response).to have_http_status(:not_found)
@@ -93,7 +101,7 @@ end
   end
 
   describe 'DELETE #destroy' do
-    let!(:book) { FactoryBot.create(:book) }
+    let!(:book) { FactoryBot.create(:book, user: user) }
     it 'destroys the book' do
       expect { delete :destroy, params: { id: book.id }, format: :json }.to change(Book, :count).by(-1)
       expect { Book.find(book.id) }.to raise_error(ActiveRecord::RecordNotFound)

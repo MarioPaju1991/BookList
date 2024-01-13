@@ -8,7 +8,11 @@ class BooksController < ApplicationController
   end
 
   def show
-    render json: @book
+    if @book
+      render json: @book
+    else
+      render json: { errors: "Book not found" }, status: :not_found
+    end
   end
 
   def new

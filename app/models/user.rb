@@ -6,14 +6,9 @@ class User < ApplicationRecord
 
   has_many :bookmarks
   has_many :books, through: :bookmarks
-
-  validates :email, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }
-  validates :password_confirmation, presence: true, if: :password_required?
   validates :first_name, presence: true
   validates :last_name, presence: true
 
-  def password_required?
-    new_record? || password.present?
-  end
 end

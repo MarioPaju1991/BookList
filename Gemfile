@@ -2,6 +2,8 @@ source "https://rubygems.org"
 
 ruby "3.1.2"
 
+gem 'shoulda-matchers', '~> 6.0'
+
 # gem which creates consistent and valid data for testing purposes
 gem 'factory_bot_rails', '~> 6.2', '>= 6.2.0'
 
