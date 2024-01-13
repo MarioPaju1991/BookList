@@ -13,7 +13,7 @@ RSpec.describe BooksController, type: :controller do
     let(:book) { FactoryBot.create(:book) }
 
     it 'returns a success response and includes book attributes' do
-      get :show, params: { id: book.id }, format: :json
+      get :show, params: { hashid: book.hashid }, format: :json
       expect(response).to have_http_status(:success)
 
 
@@ -31,7 +31,7 @@ RSpec.describe BooksController, type: :controller do
 
   context 'when the book does not exist' do
     it 'returns a not found response' do
-      get :show, params: { id: non_existent_book_id }, format: :json
+      get :show, params: { hashid: non_existent_book_id }, format: :json
       expect(response).to have_http_status(:not_found)
     end
   end

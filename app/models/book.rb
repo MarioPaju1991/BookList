@@ -1,4 +1,6 @@
 class Book < ApplicationRecord
+  include Hashid::Rails
+
   has_many :bookmarks, dependent: :destroy
   has_many :users, through: :bookmarks
 
