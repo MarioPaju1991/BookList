@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
 
-  resources :books, only: [:index, :show] do
-    resources :bookmarks, only: [:index, :show, :edit, :update, :destroy]
+  resources :books, only: [:index, :show], param: :hashid do
+    resources :bookmarks, only: [:index, :show, :edit, :update, :destroy], param: :hashid
   end
 
   resources :books, only: [:new, :create, :edit, :update, :destroy]

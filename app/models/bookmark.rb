@@ -1,4 +1,6 @@
 class Bookmark < ApplicationRecord
+  include Hashid::Rails
+
   belongs_to :user
   belongs_to :book
 

@@ -3,7 +3,7 @@ class BookmarksController < ApplicationController
   before_action :set_bookmark, only: [:show, :edit, :update, :destroy]
 
   def index
-    @bookmarks = current_user.bookmarks.includes(:book)
+    @bookmarks = current_user.bookmarks.includes(:book [:hashid])
     render json: @bookmarks
   end
 
@@ -31,7 +31,7 @@ class BookmarksController < ApplicationController
   private
 
   def set_bookmark
-    @bookmark = current_user.bookmarks.find(params[:id])
+    @bookmark = current_user.bookmarks.find_by_hashid(params[:id])
   end
 
   def bookmark_params

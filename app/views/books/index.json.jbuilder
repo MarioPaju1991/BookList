@@ -1,5 +1,5 @@
 json.array! @books do |book|
-  json.id book.id
+  json.id book.hashid
   json.title book.title
   json.author book.author
   json.publisher book.publisher
