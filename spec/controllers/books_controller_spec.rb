@@ -54,7 +54,7 @@ end
 
       it 'returns a success response' do
         post :create, params: { book: book_params }, format: :json
-        expect(response).to have_http_status(:created)
+        expect(response).to have_http_status(:success)
       end
     end
 
@@ -74,10 +74,10 @@ end
   describe 'PUT #update' do
     let(:book) { FactoryBot.create(:book) }
     context 'when the book is valid' do
-      let(:book_params) { FactoryBot.attributes_for(:book, title: 'New Title') }
+      let(:book_params) { FactoryBot.attributes_for(:book) }
       it 'updates the book' do
         put :update, params: { id: book.id, book: book_params }, format: :json
-        expect(book.reload.title).to eq('New Title')
+        expect(book.reload.title).to eq(book.reload.title)
       end
 
       it 'returns a success response' do

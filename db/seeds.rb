@@ -10,9 +10,9 @@
 
 # Clearing the existing data
 puts("cleaning the db...")
-User.destroy_all
 Book.destroy_all
 Bookmark.destroy_all
+User.destroy_all
 
 # Creating users
 user1 = User.create(

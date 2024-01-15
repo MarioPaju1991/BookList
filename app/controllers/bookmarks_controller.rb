@@ -3,12 +3,16 @@ class BookmarksController < ApplicationController
   before_action :set_bookmark, only: [:show, :edit, :update, :destroy]
 
   def index
-    @bookmarks = current_user.bookmarks.includes(:book [:hashid])
+    @bookmarks = current_user.bookmarks.includes(:book [:hashid.to_s])
     render json: @bookmarks
   end
 
   def show
-    render json: @bookmark
+    if @bookmark
+      render json: @bookmark
+    else
+      render json: { errors: "Bookmark not found" }, status: :not_found
+    end
   end
 
   def edit

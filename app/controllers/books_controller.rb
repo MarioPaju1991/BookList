@@ -1,6 +1,7 @@
 class BooksController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :set_book, only: [:show, :edit, :update]
+  before_action :new_book, only: [:create, :update]
 
   def index
     @books = Book.all
@@ -21,8 +22,6 @@ class BooksController < ApplicationController
   end
 
   def create
-    @book = Book.new(book_params)
-
     if @book.save
 
       render json: @book, status: :created, location: @book
@@ -57,6 +56,10 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:title, :author, :publisher, :genre, :image_url)
+  end
+
+  def new_book
+    @book = Book.new(book_params)
   end
 
 end
