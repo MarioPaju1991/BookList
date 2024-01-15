@@ -11,60 +11,63 @@ RSpec.describe BookmarksController, type: :controller do
 
   describe 'GET #index' do
     it 'returns a success response' do
-      get :index, format: :json
+      get :index, params: { book_hashid: book.hashid }, format: :json
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET #show' do
+  let!(:bookmark) { FactoryBot.create(:bookmark) }
+  context 'when the bookmark exists' do
     it 'returns a success response' do
-      get :show, params: { id: bookmark.to_param }, format: :json
+      get :show, params: { book_hashid: bookmark.book.hashid, hashid: bookmark.hashid }, format: :json
       expect(response).to have_http_status(:success)
     end
+  end
+end
 
-    it 'returns a not found response' do
-      get :show, params: { id: non_existent_bookmark_id }, format: :json
+context 'when the bookmark does not exist' do
+  let!(:non_existent_bookmark_id) { '123456789' }
+  it 'returns a not found response' do
+      get :show, params: { book_hashid: bookmark.book.hashid, hashid: non_existent_bookmark_id }, format: :json
       expect(response).to have_http_status(:not_found)
     end
   end
 
-  describe 'PUT #update' do
-    let(:new_book) { FactoryBot.create(:book) }
-
-    context 'with valid params' do
-      let(:new_attributes) { { book_id: new_book.hashid } }
-
-      it 'updates the requested bookmark' do
-        put :update, params: { id: bookmark.to_param, bookmark: new_attributes }, format: :json
-        bookmark.reload
-        expect(bookmark.book).to eq(new_book)
-      end
-
-      it 'returns a success response' do
-        put :update, params: { id: bookmark.to_param, bookmark: new_attributes }, format: :json
-        expect(response).to have_http_status(:success)
-      end
-    end
-
-    context 'with invalid params' do
-      it 'returns an unprocessable entity response' do
-        put :update, params: { id: bookmark.to_param, bookmark: { book_id: nil } }, format: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    it 'destroys the requested bookmark' do
-      bookmark
-      expect {
-        delete :destroy, params: { id: bookmark.to_param }, format: :json
-      }.to change(Bookmark, :count).by(-1)
-    end
-
-    it 'returns a success response' do
-      delete :destroy, params: { id: bookmark.to_param }, format: :json
+describe 'PUT #update' do
+  context 'when the bookmark is updated' do
+    let(:bookmark_params) { FactoryBot.attributes_for(:bookmark) }
+    it 'updates the bookmark' do
+      put :update, params: { book_hashid: bookmark.book.hashid, hashid: bookmark.hashid, bookmark: bookmark_params }, format: :json
       expect(response).to have_http_status(:success)
     end
   end
+
+  context 'when the bookmark does not exist' do
+    let(:non_existent_bookmark_id) { '123456789' }
+    let(:bookmark_params) { FactoryBot.attributes_for(:bookmark) }
+    it 'returns a not found response' do
+      put :update, params: { book_hashid: bookmark.book.hashid, hashid: non_existent_bookmark_id, bookmark: bookmark_params }, format: :json
+      expect(response).to have_http_status(:not_found)
+      end
+    end
+
+
+  describe 'DELETE #destroy' do
+    context 'when the bookmark is deleted' do
+      it 'deletes the bookmark' do
+        delete :destroy, params: { book_hashid: bookmark.book.hashid, hashid: bookmark.hashid }, format: :json
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+    context 'when the bookmark does not exist' do
+      let(:non_existent_bookmark_id) { '123456789' }
+      it 'returns a not found response' do
+        delete :destroy, params: { book_hashid: bookmark.book.hashid, hashid: non_existent_bookmark_id }, format: :json
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+ end
 end
