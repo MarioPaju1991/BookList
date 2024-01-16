@@ -2,6 +2,7 @@ source "https://rubygems.org"
 
 ruby "3.1.2"
 
+# Shoulda Matchers provides RSpec- and Minitest-compatible one-liners to test common Rails functionality that, if written by hand, would be much longer, more complex, and error-prone.
 gem 'shoulda-matchers', '~> 6.0'
 
 # gem which creates consistent and valid data for testing purposes
