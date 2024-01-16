@@ -101,6 +101,7 @@ end
   end
 
   describe 'DELETE #destroy' do
+
     let!(:book) { FactoryBot.create(:book, user: user) }
     it 'destroys the book' do
       expect { delete :destroy, params: { id: book.id }, format: :json }.to change(Book, :count).by(-1)

@@ -1,11 +1,12 @@
 class BooksController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
-  before_action :set_book, only: [:show, :edit, :update]
+  before_action :set_book, only: [:show, :edit]
   before_action :new_book, only: [:create, :update]
+  before_action :find_book, only: [:update, :destroy]
 
   def index
     @books = Book.all
-    render json: @books
+      render json: @books
   end
 
   def show
@@ -23,7 +24,6 @@ class BooksController < ApplicationController
 
   def create
     if @book.save
-
       render json: @book, status: :created, location: @book
     else
       render json: { errors: @book.errors.full_messages }, status: :unprocessable_entity
@@ -43,12 +43,15 @@ class BooksController < ApplicationController
   end
 
   def destroy
-
-    @book.destroy
-    render json: { message: "Book successfully deleted" }, status: :ok
+      @book.destroy
+        render json: { message: "Book successfully deleted" }, status: :ok
   end
 
   private
+
+  def find_book
+    @book = Book.find(params[:id])
+  end
 
   def set_book
     @book = Book.find_by_hashid(params[:hashid])
