@@ -41,8 +41,12 @@ user2 = User.create(
   )
 end
 
-# Creating random 5 different books already to exist in two different users bookmark
-user1.books << Book.all.sample(5)
-user2.books << Book.all.sample(5)
+# Creating random 6 different books already to exist in two different users bookmark
+# Selecting random books for user1
+user1_books = Book.all.sample(3)
+user1.books << user1_books
 
+# Selecting random books for user2
+user2_books = Book.all.sample(3)
+user2.books << user2_books
 puts("finished creating the db...")
